@@ -3,7 +3,7 @@
 process both fast and precise. Beyond its primary function, DocuLabeler can be utilized to prepare datasets for tasks such as object detection and recognition. Raw data can then be exported and used to train or finetune your ML models.
 
 ## Features
-he workflow in DocuLabeler is straightforward. When you first launch the application, you will be prompted to either register as a new user or log in as a guest. The primary distinction between the two is that guest users do not have the ability to create their personal 
+The workflow in DocuLabeler is straightforward. When you first launch the application, you will be prompted to either register as a new user or log in as a guest. The primary distinction between the two is that guest users do not have the ability to create their personal 
 projects. <br>
 
 Once you've logged in for the first time, you can create a project by clicking the **Create** button located in the upper right corner. You'll be prompted to provide a project name and, if desired, a list of labels.  Each project consists of smaller tasks, and each newly created task must include at least one image. Furthermore, task names within the same project must be unique. Once a task is created, you can click the **Open** button to begin annotating the images.<br>
