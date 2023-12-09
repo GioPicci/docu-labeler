@@ -11,6 +11,7 @@ import rightArrow from "./img/right_white.png";
 import saveImg from "./img/save_white.png";
 import load_icon from "./img/loader.png"
 
+const apiAddress = process.env.REACT_APP_.DOCULABELER_API_ADDRESS;
 
 var globalSvgHeight = 900;
 var rectLabelFontSize = 11;
@@ -96,7 +97,7 @@ export const TaskAnnotator = () => {
 
 
     const get_project_info = async () => {
-        await fetch('http://localhost:8080/project/get_project_info', {
+        await fetch(`http://${apiAddress}/project/get_project_info`, {
             method: 'POST',
             headers: {
                 //'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -113,7 +114,7 @@ export const TaskAnnotator = () => {
 
     const get_task_images_len = async () => {
         console.log("Richiesto numero di immagini per il task");
-        await fetch('http://localhost:8080/task/get_task_images_len', {
+        await fetch(`http://${apiAddress}/task/get_task_images_len`, {
             method: 'POST',
             headers: {
                 //'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -130,7 +131,7 @@ export const TaskAnnotator = () => {
 
     const get_task_image = async () => {
         console.log("Richiesta immagine task numero", currentImageId);
-        await fetch('http://localhost:8080/task/get_task_image', {
+        await fetch(`http://${apiAddress}/task/get_task_image`, {
             method: 'POST',
             headers: {
                 //'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -154,7 +155,7 @@ export const TaskAnnotator = () => {
 
     const get_task_annotations = async () => {
         console.log("GET TASK ANNOTATIONS")
-        await fetch('http://localhost:8080/annotation/get_task_annotations', {
+        await fetch(`http://${apiAddress}/annotation/get_task_annotations`, {
             method: 'POST',
             headers: {
                 //'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -635,7 +636,7 @@ export const TaskAnnotator = () => {
             });
         }
         let base64Image = "";
-        await fetch('http://localhost:8080/task/get_task_image', {
+        await fetch(`http://${apiAddress}/task/get_task_image`, {
             method: 'POST',
             headers: {
                 //'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -709,7 +710,7 @@ export const TaskAnnotator = () => {
 
     const applyTesseractOcrNode = async() => {
         saveSnapshot();
-        await fetch('http://localhost:8080/annotation/get_image_ocr', {
+        await fetch(`http://${apiAddress}/annotation/get_image_ocr`, {
             method: 'POST',
             headers: {
                 //'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -776,7 +777,7 @@ export const TaskAnnotator = () => {
         }
         setImageRectanglesDict(updatedRectDict)
         setIsSavingAll(true);
-        await fetch('http://localhost:8080/annotation/save_task_annotations', {
+        await fetch(`http://${apiAddress}/annotation/save_task_annotations`, {
             method: 'POST',
             headers: {
                 //'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -808,7 +809,7 @@ export const TaskAnnotator = () => {
         }
         setImageRectanglesDict(updatedRectDict)
         setIsSavingAll(true);
-        await fetch('http://localhost:8080/annotation/save_task_annotations', {
+        await fetch(`http://${apiAddress}/annotation/save_task_annotations`, {
             method: 'POST',
             headers: {
                 //'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',

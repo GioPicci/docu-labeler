@@ -13,7 +13,7 @@ import modify_icon from "./img/pencil.png";
 
 
 let currentTasks=[];
-
+const apiAddress = process.env.REACT_APP_.DOCULABELER_API_ADDRESS;
 
 export const ProjectTasksContainer = (params) => {
     let navigate = useNavigate();
@@ -100,7 +100,7 @@ export const ProjectTasksContainer = (params) => {
         for (let i = 0; i < droppedFiles.length; i++) {
           formData.append("files", droppedFiles[i]);
         }    
-        const task_creation_res = await fetch('http://localhost:8080/task/create_task', {
+        const task_creation_res = await fetch(`http://${apiAddress}/task/create_task`, {
           method: 'POST',
           //headers: {
           //  'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -135,7 +135,7 @@ export const ProjectTasksContainer = (params) => {
     async function deleteTask(task_id) {
       const formData = new URLSearchParams();
       formData.append('task_id', task_id);
-      await fetch('http://localhost:8080/task/delete_task', {
+      await fetch(`http://${apiAddress}/task/delete_task`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -158,7 +158,7 @@ export const ProjectTasksContainer = (params) => {
         console.log("Richiesti task per ", project_id);
         const formData = new URLSearchParams();
         formData.append('project_id', project_id);
-        await fetch('http://localhost:8080/task/get_project_tasks', {
+        await fetch(`http://${apiAddress}/task/get_project_tasks`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -195,7 +195,7 @@ export const ProjectTasksContainer = (params) => {
       descriptionBox.contentEditable = "false";
       const description = descriptionBox.innerText;
       console.log("Descrizione!", description);
-      const response = await fetch("http://localhost:8080/project/update_project_description", {
+      const response = await fetch(`http://${apiAddress}/project/update_project_description`, {
           method: "POST",
           headers: {
             'Content-Type': 'application/json'
@@ -256,7 +256,7 @@ export const ProjectTasksContainer = (params) => {
         formData.append('project_id', project_id);
         formData.append('labelsList', JSON.stringify(labelsList));
 
-        fetch('http://localhost:8080/project/update_project_labels', {
+        fetch(`http://${apiAddress}/project/update_project_labels`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

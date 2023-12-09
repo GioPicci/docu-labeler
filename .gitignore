@@ -1,2 +1,25 @@
 node_modules
 server/storage/project_data/*
+!server/storage/project_data/.gitignore
+
+# dependencies
+doculabeler/node_modules
+doculabeler/.pnp
+doculabeler/.pnp.js
+
+# testing
+doculabeler/coverage
+
+# production
+doculabeler/build
+
+# misc
+doculabeler/.DS_Store
+doculabeler/.env.local
+doculabeler/.env.development.local
+doculabeler/.env.test.local
+doculabeler/.env.production.local
+
+doculabeler/npm-debug.log*
+doculabeler/yarn-debug.log*
+doculabeler/yarn-error.log*

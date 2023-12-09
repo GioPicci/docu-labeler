@@ -4,6 +4,9 @@ import { useNavigate } from 'react-router-dom'; // Import useHistory for redirec
 import './login.css';
 import load_icon from "./img/loader.png"
 
+const apiAddress = process.env.REACT_APP_.DOCULABELER_API_ADDRESS;
+
+
 const LoginComponent = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
@@ -25,7 +28,7 @@ const LoginComponent = () => {
                 password: formData.password,
             };
     
-            const response = await fetch('http://localhost:8080/auth/login', {
+            const response = await fetch(`http://${apiAddress}/auth/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json', // Use JSON content type.
@@ -57,7 +60,7 @@ const LoginComponent = () => {
         const loginErrorMessage = document.getElementById("login-error-message");
         try {
             // Use formData.username and formData.password to send to the server
-            const response = await fetch('http://localhost:8080/auth/guest_login', {
+            const response = await fetch(`http://${apiAddress}/auth/guest_login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json', // Use JSON content type.

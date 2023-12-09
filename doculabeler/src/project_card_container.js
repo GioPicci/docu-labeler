@@ -3,6 +3,8 @@ import {useState, useEffect} from 'react';
 import whiteBox from "./img/box_white.png";
 import notLogged from "./img/not_logged.png";
 
+const apiAddress = process.env.REACT_APP_.DOCULABELER_API_ADDRESS;
+
 export const ProjectCardContainer = (params) => {
 
     const [requestsQueue, setRequestsQueue] = useState([]);
@@ -15,7 +17,7 @@ export const ProjectCardContainer = (params) => {
       const formData = new URLSearchParams();
       formData.append('project_id', project_id);
       formData.append('user_id', user_id);
-      const response = await fetch('http://localhost:8080/project/delete_project', {
+      const response = await fetch(`http://${apiAddress}/project/delete_project`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',

@@ -1,6 +1,8 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 
+const apiAddress = process.env.REACT_APP_.DOCULABELER_API_ADDRESS;
+
 const ProtectedRoute = ({ children }) => {
   // Check if the user is authenticated (e.g., JWT exists)
   const [isLoading, setIsLoading] = React.useState(true);
@@ -10,7 +12,7 @@ const ProtectedRoute = ({ children }) => {
     if (!localStorage.getItem('jwt')) return false;
     const currFormData = new URLSearchParams();
     currFormData.append('token', localStorage.getItem('jwt'));
-    const response = await fetch('http://localhost:8080/auth/verify_jwt', {
+    const response = await fetch(`http://${apiAddress}/auth/verify_jwt`, {
       method: 'POST',
       headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
