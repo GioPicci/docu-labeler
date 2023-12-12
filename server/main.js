@@ -1,4 +1,4 @@
-const allowedOrigins = ['http://localhost:3000', 'http://192.168.230.235:3000', 'http://localhost:3001', 'http://localhost'];
+const allowedOrigins = ['http://localhost:3000', 'http://192.168.230.235:3000', 'host.docker.internal'];
 
 const express = require("express");
 const bodyParser = require("body-parser")
