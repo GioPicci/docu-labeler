@@ -19,7 +19,7 @@ export const ProjectCard = ({ title, id, creator, completed_tasks, total_tasks, 
   const get_project_annotations = async () => {
     console.log("GET PROJECT ANNOTATIONS")
     const project_id = id;
-    await fetch('http://localhost:8080/annotation/get_project_annotations_export', {
+    await fetch('http://192.168.230.235:8080/annotation/get_project_annotations_export', {
         method: 'POST',
         headers: {
           //'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -39,7 +39,7 @@ export const ProjectCard = ({ title, id, creator, completed_tasks, total_tasks, 
     e.preventDefault();
     const updProjects = [...projects]
     const project_id = id;
-    await fetch('http://localhost:8080/project/publish_project', {
+    await fetch('http://192.168.230.235:8080/project/publish_project', {
         method: 'POST',
         headers: {
           //'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -65,7 +65,7 @@ export const ProjectCard = ({ title, id, creator, completed_tasks, total_tasks, 
     e.preventDefault();
     const updProjects = [...projects];
     const project_id = id;
-    await fetch('http://localhost:8080/project/private_project', {
+    await fetch('http://192.168.230.235:8080/project/private_project', {
         method: 'POST',
         headers: {
           //'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -91,7 +91,7 @@ export const ProjectCard = ({ title, id, creator, completed_tasks, total_tasks, 
     try {
       const project_id = id;
 
-      const response = await fetch('http://localhost:8080/task/get_task_image', {
+      const response = await fetch('http://192.168.230.235:8080/task/get_task_image', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

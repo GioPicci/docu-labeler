@@ -96,7 +96,7 @@ export const TaskAnnotator = () => {
 
 
     const get_project_info = async () => {
-        await fetch('http://localhost:8080/project/get_project_info', {
+        await fetch('http://192.168.230.235:8080/project/get_project_info', {
             method: 'POST',
             headers: {
                 //'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -113,7 +113,7 @@ export const TaskAnnotator = () => {
 
     const get_task_images_len = async () => {
         console.log("Richiesto numero di immagini per il task");
-        await fetch('http://localhost:8080/task/get_task_images_len', {
+        await fetch('http://192.168.230.235:8080/task/get_task_images_len', {
             method: 'POST',
             headers: {
                 //'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -130,7 +130,7 @@ export const TaskAnnotator = () => {
 
     const get_task_image = async () => {
         console.log("Richiesta immagine task numero", currentImageId);
-        await fetch('http://localhost:8080/task/get_task_image', {
+        await fetch('http://192.168.230.235:8080/task/get_task_image', {
             method: 'POST',
             headers: {
                 //'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -154,7 +154,7 @@ export const TaskAnnotator = () => {
 
     const get_task_annotations = async () => {
         console.log("GET TASK ANNOTATIONS")
-        await fetch('http://localhost:8080/annotation/get_task_annotations', {
+        await fetch('http://192.168.230.235:8080/annotation/get_task_annotations', {
             method: 'POST',
             headers: {
                 //'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -635,7 +635,7 @@ export const TaskAnnotator = () => {
             });
         }
         let base64Image = "";
-        await fetch('http://localhost:8080/task/get_task_image', {
+        await fetch('http://192.168.230.235:8080/task/get_task_image', {
             method: 'POST',
             headers: {
                 //'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -709,7 +709,7 @@ export const TaskAnnotator = () => {
 
     const applyTesseractOcrNode = async() => {
         saveSnapshot();
-        await fetch('http://localhost:8080/annotation/get_image_ocr', {
+        await fetch('http://192.168.230.235:8080/annotation/get_image_ocr', {
             method: 'POST',
             headers: {
                 //'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -776,7 +776,7 @@ export const TaskAnnotator = () => {
         }
         setImageRectanglesDict(updatedRectDict)
         setIsSavingAll(true);
-        await fetch('http://localhost:8080/annotation/save_task_annotations', {
+        await fetch('http://192.168.230.235:8080/annotation/save_task_annotations', {
             method: 'POST',
             headers: {
                 //'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -808,7 +808,7 @@ export const TaskAnnotator = () => {
         }
         setImageRectanglesDict(updatedRectDict)
         setIsSavingAll(true);
-        await fetch('http://localhost:8080/annotation/save_task_annotations', {
+        await fetch('http://192.168.230.235:8080/annotation/save_task_annotations', {
             method: 'POST',
             headers: {
                 //'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',

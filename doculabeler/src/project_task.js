@@ -16,7 +16,7 @@ export const TaskCard = (params) => {
 
   const get_task_annotations = async () => {
       console.log("GET TASK ANNOTATIONS")
-      await fetch('http://localhost:8080/annotation/get_task_annotations_export', {
+      await fetch('http://192.168.230.235:8080/annotation/get_task_annotations_export', {
         method: 'POST',
         headers: {
           //'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -35,7 +35,7 @@ const get_task_images = async () => {
   let images = [];
   let total_images = 0;
   console.log("Richiesto numero di immagini per il task");
-  await fetch('http://localhost:8080/task/get_task_images_len', {
+  await fetch('http://192.168.230.235:8080/task/get_task_images_len', {
       method: 'POST',
       headers: {
           //'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -53,7 +53,7 @@ const get_task_images = async () => {
     for(let i = 0; i<total_images; i++) {
       const currentImageId = i.toString();
       console.log("Richiesta immagine task numero", i);
-      await fetch('http://localhost:8080/task/get_task_image', {
+      await fetch('http://192.168.230.235:8080/task/get_task_image', {
           method: 'POST',
           headers: {
               //'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -80,7 +80,7 @@ const get_task_images = async () => {
 }
   const get_task_image = async (currentImageId) => {
     try {
-      const response = await fetch('http://localhost:8080/task/get_task_image', {
+      const response = await fetch('http://192.168.230.235:8080/task/get_task_image', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

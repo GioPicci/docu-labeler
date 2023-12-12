@@ -31,7 +31,7 @@ export const RegisterComponent = () => {
             const currFormData = new URLSearchParams();
             currFormData.append('username', username);
             currFormData.append('password', password);
-            const response = await fetch('http://localhost:8080/auth/login', {
+            const response = await fetch('http://192.168.230.235:8080/auth/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -63,7 +63,7 @@ export const RegisterComponent = () => {
         };
         try {
           // Make an HTTP POST request to your registration endpoint
-          const response = await fetch("http://localhost:8080/register", {
+          const response = await fetch("http://192.168.230.235:8080/register", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json', // Set the content type to JSON

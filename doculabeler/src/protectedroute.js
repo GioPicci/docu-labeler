@@ -10,7 +10,7 @@ const ProtectedRoute = ({ children }) => {
     if (!localStorage.getItem('jwt')) return false;
     const currFormData = new URLSearchParams();
     currFormData.append('token', localStorage.getItem('jwt'));
-    const response = await fetch('http://localhost:8080/auth/verify_jwt', {
+    const response = await fetch('http://192.168.230.235:8080/auth/verify_jwt', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/x-www-form-urlencoded',

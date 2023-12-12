@@ -15,7 +15,7 @@ export const ProjectCardContainer = (params) => {
       const formData = new URLSearchParams();
       formData.append('project_id', project_id);
       formData.append('user_id', user_id);
-      const response = await fetch('http://localhost:8080/project/delete_project', {
+      const response = await fetch('http://192.168.230.235:8080/project/delete_project', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',

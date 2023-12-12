@@ -8,7 +8,7 @@ export var currPublicProjects = []
 export async function fetchPublicProjects() {
     const formData = new URLSearchParams();
     formData.append('username', localStorage.getItem("username"));
-    await fetch('http://localhost:8080/project/get_public_projects', {
+    await fetch('http://192.168.230.235:8080/project/get_public_projects', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -77,7 +77,7 @@ export const PublicProjectsPage = () => {
             let username = localStorage.getItem("username")
             setIsLoading(true);
             setIsCreateFormVisible(false);
-            fetch('http://localhost:8080/project/create_project', {
+            fetch('http://192.168.230.235:8080/project/create_project', {
                 method: 'POST',
                 headers: {
                     //'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',

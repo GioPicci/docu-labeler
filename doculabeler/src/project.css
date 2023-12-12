@@ -1127,9 +1127,13 @@ text {
     box-shadow: 2px 2px 10px black;
     background-color: #191b1b;
     position: fixed;
+    width: 80%;
+    overflow: auto;
+    height: 50px;
     padding: 7px 20px 5px 20px;
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 18px;
     bottom: 0px;
     left: 50px;
@@ -1161,6 +1165,7 @@ text {
     padding: 3px 12px;
     border: 1px solid;
     color:#0e0e0e;
+    font-size: 13px;
     box-shadow: 2px 0px 4px 2px black;
 }
 

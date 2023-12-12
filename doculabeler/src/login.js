@@ -25,7 +25,7 @@ const LoginComponent = () => {
                 password: formData.password,
             };
     
-            const response = await fetch('http://localhost:8080/auth/login', {
+            const response = await fetch('http://192.168.230.235:8080/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json', // Use JSON content type.
@@ -57,7 +57,7 @@ const LoginComponent = () => {
         const loginErrorMessage = document.getElementById("login-error-message");
         try {
             // Use formData.username and formData.password to send to the server
-            const response = await fetch('http://localhost:8080/auth/guest_login', {
+            const response = await fetch('http://192.168.230.235:8080/auth/guest_login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json', // Use JSON content type.

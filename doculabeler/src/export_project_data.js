@@ -56,6 +56,7 @@ export const ExportProjectDataPage = (params) => {
             }
             setImagesTotal(imagesTmp);
             if (selectedFormat === "Raw JSON") {
+                console.log("Params!!!", params)
                 for(let taskData of params.projectData) {
                     const filenames = taskData.filenames;
 
@@ -92,12 +93,14 @@ export const ExportProjectDataPage = (params) => {
                         const height = file_info.height;
                         const width = file_info.width;
                         let yolo_item_string_list = []
+                        const x_offset = 100;
                         //NOTA, LIMITARE COORDINATE X e Y BOX! TRA 0 E W/H
                         for(const item of annotations[key]) {
                             //400 è la dimensione del viewport SVG, OCCHIO SE CAMBIA!!
                             let rateo = width/400;
                             const label_id= (item.label in label_name_idx ? label_name_idx[item.label] : Object.keys(label_name_idx).length)
-                            let [x, y, w, h] = [item.x*rateo, item.y*rateo, item.width*rateo, item.height*rateo];
+                            let [x, y, w, h] = [(item.x-x_offset)*rateo, item.y*rateo, item.width*rateo, item.height*rateo];
+                            console.log("Coords:",x ,y, w, h)
                             const x2 = Math.max(0, Math.min(x+w, width));
                             const y2 = Math.max(0, Math.min(y+h, height));
                             // Limita coordinate in modo che non escano dai bordi dell'immagine

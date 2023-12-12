@@ -67,7 +67,7 @@ export const BottomTaskAnnotationBar = ({labels_list, activeLabel, setActiveLabe
           formData.append('project_id', project_id);
           formData.append('labelsList', JSON.stringify(labelsList));
   
-          fetch('http://localhost:8080/project/update_project_labels', {
+          fetch('http://192.168.230.235:8080/project/update_project_labels', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
