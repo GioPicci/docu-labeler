@@ -1,4 +1,4 @@
-const allowedOrigins = ['http://localhost:3000', 'http://192.168.230.235:3000', 'host.docker.internal'];
+const allowedOrigins = ['http://localhost:3000', 'http://192.168.230.235:3000', 'host.docker.internal', 'http://localhost:3001'];
 
 const express = require("express");
 const bodyParser = require("body-parser")
@@ -16,7 +16,7 @@ const mongoose = require("mongoose");
 connection_string_local = 'mongodb://127.0.0.1:27017/DocuLabeler'
 connection_string_docker = 'mongodb://host.docker.internal:27017/DocuLabeler'
 
-mongoose.connect(connection_string_docker)
+mongoose.connect(connection_string_local)
 .then(console.log("Mongoose: connesso al server"));
 
 const express_server = express();
