@@ -4,11 +4,14 @@ import './project.css'
 import { useState, useEffect } from 'react';
 import load_icon from "./img/loader.png"
 
+const apiAddress = process.env.REACT_APP_.DOCULABELER_API_ADDRESS;
+console.log("ADDR API!!", apiAddress)
+
 export var currUserProjects = []
 export async function fetchUserProjects() {
     const formData = new URLSearchParams();
     formData.append('username', localStorage.getItem("username"));
-    await fetch('http://192.168.230.235:8080/project/get_projects', {
+    await fetch(`http://${apiAddress}/project/get_projects`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -80,7 +83,7 @@ export const ProjectsPage = () => {
             let username = localStorage.getItem("username")
             setIsLoading(true);
             setIsCreateFormVisible(false);
-            fetch('http://192.168.230.235:8080/project/create_project', {
+            fetch(`http://${apiAddress}/project/create_project`, {
                 method: 'POST',
                 headers: {
                     //'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',

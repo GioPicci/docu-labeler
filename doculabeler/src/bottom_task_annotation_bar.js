@@ -4,6 +4,9 @@ import { blendWithWhite } from "./right_task_toolbar_item";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { CompactPicker } from "react-color";
+
+const apiAddress = process.env.REACT_APP_.DOCULABELER_API_ADDRESS;
+
 export const BottomTaskAnnotationBar = ({labels_list, activeLabel, setActiveLabel}) => {
     const {project_id, task_id} = useParams();
     const [isNewLabelFormActive, setNewLabelFormState] = useState(false);
@@ -66,8 +69,8 @@ export const BottomTaskAnnotationBar = ({labels_list, activeLabel, setActiveLabe
           const formData = new URLSearchParams();
           formData.append('project_id', project_id);
           formData.append('labelsList', JSON.stringify(labelsList));
-  
-          fetch('http://192.168.230.235:8080/project/update_project_labels', {
+          fetch(`http://${apiAddress}/project/update_project_labels`, {
+
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'; // Import useHistory for redirec
 import load_icon from "./img/loader.png"
 
 import './register.css';
+const apiAddress = process.env.REACT_APP_.DOCULABELER_API_ADDRESS;
 
 export const RegisterComponent = () => {
     const navigate = useNavigate();
@@ -31,7 +32,7 @@ export const RegisterComponent = () => {
             const currFormData = new URLSearchParams();
             currFormData.append('username', username);
             currFormData.append('password', password);
-            const response = await fetch('http://192.168.230.235:8080/auth/login', {
+            const response = await fetch(`http://${apiAddress}/auth/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -63,7 +64,7 @@ export const RegisterComponent = () => {
         };
         try {
           // Make an HTTP POST request to your registration endpoint
-          const response = await fetch("http://192.168.230.235:8080/register", {
+          const response = await fetch(`http://${apiAddress}/register`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json', // Set the content type to JSON

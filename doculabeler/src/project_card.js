@@ -1,15 +1,15 @@
 import ProjectCardDropdown from './project_card_dropdown'
 import placeholder from "./img/empty-folder.png"
-import { param } from 'express-validator';
 import { useEffect, useState } from "react";
 import publicImg from "./img/public.png";
 import privateImg from "./img/private.png";
 
-
 import { Link } from 'react-router-dom';
 
 import {ExportProjectDataPage} from "./export_project_data";
-var imgthumbnail=placeholder;
+
+const apiAddress = process.env.REACT_APP_.DOCULABELER_API_ADDRESS;
+
 export const ProjectCard = ({ title, id, creator, completed_tasks, total_tasks, ok_annotations, missing_annotations, creation_date, onDelete, thumbnail, isPublic, projects, updateProjects}) => {
   const [isExportMenuActive, setExportMenuState] = useState(false);
   const [projectData, setProjectData] = useState([]);
@@ -19,7 +19,7 @@ export const ProjectCard = ({ title, id, creator, completed_tasks, total_tasks, 
   const get_project_annotations = async () => {
     console.log("GET PROJECT ANNOTATIONS")
     const project_id = id;
-    await fetch('http://192.168.230.235:8080/annotation/get_project_annotations_export', {
+    await fetch(`http://${apiAddress}/annotation/get_project_annotations_export`, {
         method: 'POST',
         headers: {
           //'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -39,7 +39,7 @@ export const ProjectCard = ({ title, id, creator, completed_tasks, total_tasks, 
     e.preventDefault();
     const updProjects = [...projects]
     const project_id = id;
-    await fetch('http://192.168.230.235:8080/project/publish_project', {
+    await fetch(`http://${apiAddress}/project/publish_project`, {
         method: 'POST',
         headers: {
           //'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -65,7 +65,7 @@ export const ProjectCard = ({ title, id, creator, completed_tasks, total_tasks, 
     e.preventDefault();
     const updProjects = [...projects];
     const project_id = id;
-    await fetch('http://192.168.230.235:8080/project/private_project', {
+    await fetch(`http://${apiAddress}/project/private_project`, {
         method: 'POST',
         headers: {
           //'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -91,7 +91,7 @@ export const ProjectCard = ({ title, id, creator, completed_tasks, total_tasks, 
     try {
       const project_id = id;
 
-      const response = await fetch('http://192.168.230.235:8080/task/get_task_image', {
+      const response = await fetch(`http://${apiAddress}/task/get_task_image`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

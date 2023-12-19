@@ -6,11 +6,14 @@ import { RightTaskAnnotationToolbar } from "./right_task_toolbar";
 import { useParams } from 'react-router-dom';
 import { TextLabel, addAlphaToRGB} from "./text_label";
 import { BottomTaskAnnotationBar } from "./bottom_task_annotation_bar";
+import Cookies from 'universal-cookie';
 import leftArrow from "./img/left_white.png";
 import rightArrow from "./img/right_white.png";
 import saveImg from "./img/save_white.png";
 import load_icon from "./img/loader.png"
 
+const apiAddress = process.env.REACT_APP_.DOCULABELER_API_ADDRESS;
+const cookies = new Cookies();
 
 var globalSvgHeight = 900;
 var rectLabelFontSize = 11;
@@ -50,6 +53,8 @@ export const TaskAnnotator = () => {
     const [startDragX, setStartDragX] = useState(0);
     const [startDragY, setStartDragY] = useState(0);
 
+    const [isDrawingSelection, setIsDrawingSelection] = useState(0)
+
     // StateVars per gestire il ridimensionamento dei rettangoli
     const [isResizingRectangle, setIsResizingRectangle] = useState(false);
     const [resizeAngle, setResizeAngle] = useState("");
@@ -80,7 +85,9 @@ export const TaskAnnotator = () => {
 
     const [taskImagesTotal, setTaskImagesTotal] = useState(0);
 
-    const [currentImageId, setCurrentImageId] = useState(0);
+    // L'ID dell'immagine da caricare per prima viene impostato a 0 di default. Se trovo un cookie relativo all'ID dell'ultima immagine annotata e il task ID ad
+    // esso associato è uguale all'ID del task corrente uso quest'ultimo invece.
+    const [currentImageId, setCurrentImageId] = useState(cookies.get("lastTaskId") == task_id && cookies.get("lastImageId") !== undefined ? cookies.get("lastImageId"):0);
 
     function saveSnapshot() {
         const snapshot = {
@@ -96,7 +103,7 @@ export const TaskAnnotator = () => {
 
 
     const get_project_info = async () => {
-        await fetch('http://192.168.230.235:8080/project/get_project_info', {
+        await fetch(`http://${apiAddress}/project/get_project_info`, {
             method: 'POST',
             headers: {
                 //'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -113,7 +120,7 @@ export const TaskAnnotator = () => {
 
     const get_task_images_len = async () => {
         console.log("Richiesto numero di immagini per il task");
-        await fetch('http://192.168.230.235:8080/task/get_task_images_len', {
+        await fetch(`http://${apiAddress}/task/get_task_images_len`, {
             method: 'POST',
             headers: {
                 //'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -130,7 +137,7 @@ export const TaskAnnotator = () => {
 
     const get_task_image = async () => {
         console.log("Richiesta immagine task numero", currentImageId);
-        await fetch('http://192.168.230.235:8080/task/get_task_image', {
+        await fetch(`http://${apiAddress}/task/get_task_image`, {
             method: 'POST',
             headers: {
                 //'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -154,7 +161,7 @@ export const TaskAnnotator = () => {
 
     const get_task_annotations = async () => {
         console.log("GET TASK ANNOTATIONS")
-        await fetch('http://192.168.230.235:8080/annotation/get_task_annotations', {
+        await fetch(`http://${apiAddress}/annotation/get_task_annotations`, {
             method: 'POST',
             headers: {
                 //'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -193,7 +200,7 @@ export const TaskAnnotator = () => {
 
     const sendRequest = async (requestFunction) => {
         try {
-            console.log(requestFunction)
+            // console.log(requestFunction)
             await requestFunction();
         } catch (error) {
             // Handle errors here
@@ -213,7 +220,7 @@ export const TaskAnnotator = () => {
     
           // Dequeue the next request and send it to the server
           const nextRequest = requestsQueue.shift();
-          console.log("Processo richiesta in coda", nextRequest)
+          // console.log("Processo richiesta in coda", nextRequest)
 
           sendRequest(nextRequest)
             .then(() => {
@@ -274,7 +281,7 @@ export const TaskAnnotator = () => {
         }
     }, [keyState]);
 
-    const prevImageId = usePrevious(currentImageId);
+    var prevImageId = usePrevious(currentImageId);
 
     useEffect(() => {
         init_image_rect_dict();
@@ -283,6 +290,7 @@ export const TaskAnnotator = () => {
     useEffect(() => {
         if(prevImageId!==undefined) {
             setSnapshotList([]);
+            console.log("USEEFFECT: Cerco di recuperare l'immagine", currentImageId)
             enqueueRequest(get_task_image());
             // Se è stata modificata qualcosa nelle annotazioni le salvo a DB
 
@@ -301,13 +309,12 @@ export const TaskAnnotator = () => {
     }, [currentImageId])
 
     const handleWheel = (e) => {
-        // DA SISTEMARE QUESTA COSTANTE. NON E' PIU' 0.666!
-        let svgWidth = window.innerWidth*0.66666; 
+        let svgWidth = window.innerWidth*0.94736; 
         let svgHeight = globalSvgHeight;
         //console.log(window.innerWidth*0.66666)
-
-        const scaleFactor = e.deltaY > 0 ? 1.1 : 0.9; // Adjust zoom speed as needed
-        imageZoomFactor *= scaleFactor;
+        console.log("Valore deltaY: ", e.deltaY)
+        const scaleFactor = (imageZoomFactor < 0.10 && e.deltaY < 0) || (imageZoomFactor > 3 && e.deltaY > 0) || e.deltaY == 0 ? 1 : 1.1 
+        imageZoomFactor = e.deltaY > 0 ? imageZoomFactor * scaleFactor : imageZoomFactor / scaleFactor
         const mouseX = e.nativeEvent.offsetX;
         const mouseY = e.nativeEvent.offsetY;
 
@@ -316,12 +323,12 @@ export const TaskAnnotator = () => {
         //console.log("mouse", mouseX, mouseY);
 
         // Calculate new dimensions for viewBox
-        const newWidth = viewBox.width * scaleFactor;
-        const newHeight = viewBox.height * scaleFactor;
+        const newWidth = e.deltaY > 0 ? viewBox.width * scaleFactor : viewBox.width / scaleFactor;
+        const newHeight = e.deltaY > 0 ? viewBox.height * scaleFactor : viewBox.height / scaleFactor;
 
         // Calculate new x and y values to keep the mouse pointer centered
-        const newX = fixedX - (fixedX - viewBox.x) * scaleFactor;
-        const newY = fixedY - (fixedY - viewBox.y) * scaleFactor;
+        const newX = e.deltaY > 0 ? fixedX - (fixedX - viewBox.x) * scaleFactor : fixedX - (fixedX - viewBox.x) / scaleFactor;
+        const newY = e.deltaY > 0 ? fixedY - (fixedY - viewBox.y) * scaleFactor : fixedY - (fixedY - viewBox.y) / scaleFactor;
 
         const deltaX = (mouseX / svgWidth) * viewBox.width;
         const deltaY = (viewBox.height - newHeight) * (mouseY / globalSvgHeight);
@@ -354,6 +361,15 @@ export const TaskAnnotator = () => {
                 setIsResizingRectangle(true);
                 setResizeStartX(mousePosition.x);
                 setResizeStartY(mousePosition.y);
+            }
+            else if (e.target.tagName == 'image' && e.button == 0) {
+                console.log("Ho cliccato sul canvas, ma su nessun oggetto")
+                console.log(e.button);
+                if(!isDrawingSelection) {
+                    const svgPoint = mousePosition;
+                    setStartPoint({ x: svgPoint.x, y: svgPoint.y });
+                    setIsDrawingSelection(true);
+                }
             }
         }
 
@@ -447,9 +463,66 @@ export const TaskAnnotator = () => {
     
     };
 
+    //const rectanglesIntersect = (left1, top1, right1, bottom1, left2, top2, right2, bottom2) =>{
+    //    return !(left2 > right1 ||
+    //            right2 < left1 ||
+    //            top2 > bottom1 ||
+    //            bottom2 < top1);
+    //}
+
+    const rectanglesIntersect = (rectangle1, rectangle2) => {
+        // Extract coordinates from rectangles
+        let [x1_1, y1_1, x2_1, y2_1] = rectangle1
+        let [x1_2, y1_2, x2_2, y2_2] = rectangle2
+
+        // Check for no overlap
+        if (x2_1 <= x1_2 || x2_2 <= x1_1 || y2_1 <= y1_2 || y2_2 <= y1_1)
+            return false  // No overlap, return 0%
+
+        // Calculate intersection coordinates
+        let x_intersection = Math.max(0, Math.min(x2_1, x2_2) - Math.max(x1_1, x1_2))
+        let y_intersection = Math.max(0, Math.min(y2_1, y2_2) - Math.max(y1_1, y1_2))
+
+        // Calculate areas of rectangles and intersection
+        let area1 = (x2_1 - x1_1) * (y2_1 - y1_1)
+        let area2 = (x2_2 - x1_2) * (y2_2 - y1_2)
+        let intersection_area = x_intersection * y_intersection
+        // Calculate union area
+        let union_area = area1 + area2 - intersection_area
+
+        // Check for no overlap
+        if (union_area == 0)
+            return false  // No overlap, return 0%
+        return true
+    }
+    
+
     const handleMouseUp = () => {
         setIsDragging(false);
         setIsResizingRectangle(false);
+        if(isDrawingSelection) {
+            const svgPoint = mousePosition;
+            setEndPoint({ x: svgPoint.x, y: svgPoint.y });
+            let tmp = []
+            if (svgPoint.x < startPoint.x || svgPoint.y < startPoint.y) {
+                tmp = [startPoint.x, startPoint.y];
+                startPoint.x = svgPoint.x;
+                startPoint.y = svgPoint.y;
+                svgPoint.x = tmp[0];
+                svgPoint.y = tmp[1];
+            }
+            //console.log("start e endpoint del box di selezione", startPoint, { x: svgPoint.x, y: svgPoint.y });
+            let selectedRectangles = [...rectangles]
+            for(let rectangle of selectedRectangles) {
+                let [x1, y1, x2, y2] = [rectangle.x - rectangle.width/2, rectangle.y - rectangle.height/2, 
+                rectangle.x + rectangle.width/2, rectangle.y + rectangle.height/2];
+                rectangle.selected = rectanglesIntersect([x1,y1,x2,y2], [startPoint.x, startPoint.y, svgPoint.x, svgPoint.y])
+                //console.log(x1,y1,x2,y2,rectangle.selected)
+            }
+            setRectangles(selectedRectangles)
+            setIsDrawingSelection(false);
+
+        }
     }
 
     const handleMouseLeave = () => {
@@ -619,6 +692,10 @@ export const TaskAnnotator = () => {
         if(imageSlider.value < taskImagesTotal-1) {
             imageSlider.value = parseInt(imageSlider.value) + 1
             setCurrentImageId(imageSlider.value);
+            cookies.set("lastImageId", imageSlider.value, { path: '/' })
+            cookies.set("lastTaskId", task_id, { path: '/' })
+            imageZoomFactor = 1
+            setViewBox({ x: -200, y: 0, width: 1000, height: 600 });
         } 
     }
 
@@ -635,7 +712,7 @@ export const TaskAnnotator = () => {
             });
         }
         let base64Image = "";
-        await fetch('http://192.168.230.235:8080/task/get_task_image', {
+        await fetch(`http://${apiAddress}/task/get_task_image`, {
             method: 'POST',
             headers: {
                 //'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -709,7 +786,7 @@ export const TaskAnnotator = () => {
 
     const applyTesseractOcrNode = async() => {
         saveSnapshot();
-        await fetch('http://192.168.230.235:8080/annotation/get_image_ocr', {
+        await fetch(`http://${apiAddress}/annotation/get_image_ocr`, {
             method: 'POST',
             headers: {
                 //'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -761,6 +838,10 @@ export const TaskAnnotator = () => {
         if(imageSlider.value > 0) {
             imageSlider.value= parseInt(imageSlider.value) - 1
             setCurrentImageId(imageSlider.value);
+            cookies.set("lastImageId", imageSlider.value, { path: '/' })
+            cookies.set("lastTaskId", task_id, { path: '/' })
+            imageZoomFactor = 1
+            setViewBox({ x: -200, y: 0, width: 1000, height: 600 });
         } 
     }
 
@@ -776,7 +857,7 @@ export const TaskAnnotator = () => {
         }
         setImageRectanglesDict(updatedRectDict)
         setIsSavingAll(true);
-        await fetch('http://192.168.230.235:8080/annotation/save_task_annotations', {
+        await fetch(`http://${apiAddress}/annotation/save_task_annotations`, {
             method: 'POST',
             headers: {
                 //'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -808,7 +889,7 @@ export const TaskAnnotator = () => {
         }
         setImageRectanglesDict(updatedRectDict)
         setIsSavingAll(true);
-        await fetch('http://192.168.230.235:8080/annotation/save_task_annotations', {
+        await fetch(`http://${apiAddress}/annotation/save_task_annotations`, {
             method: 'POST',
             headers: {
                 //'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -831,6 +912,10 @@ export const TaskAnnotator = () => {
     const handleImageSlider = (e) => {
         console.log(e.target.value);
         setCurrentImageId(e.target.value);
+        cookies.set("lastImageId", e.target.value, { path: '/' });
+        cookies.set("lastTaskId", task_id, { path: '/' })
+        imageZoomFactor = 1
+        setViewBox({ x: -200, y: 0, width: 1000, height: 600 });
     }
 
     return (
@@ -961,6 +1046,18 @@ export const TaskAnnotator = () => {
                 </g>}
                 {/* Preview del rettangolo che sto disegnando correntemente*/}
                 {currentMode === 'drawRectMode' && isDrawing && (
+                    <rect
+                        x={Math.min(startPoint.x, mousePosition.x)}
+                        y={Math.min(startPoint.y, mousePosition.y)}
+                        width={Math.abs(startPoint.x - mousePosition.x)}
+                        height={Math.abs(startPoint.y - mousePosition.y)}
+                        fill={addAlphaToRGB(activeLabel[1], 0.3)}
+                        stroke={activeLabel[1]}
+                        strokeWidth={1.2*imageZoomFactor}
+                        strokeDasharray="1" // Add dashes for preview effect
+                    />
+                )}
+                {currentMode === 'selectMode' && isDrawingSelection && (
                     <rect
                         x={Math.min(startPoint.x, mousePosition.x)}
                         y={Math.min(startPoint.y, mousePosition.y)}
