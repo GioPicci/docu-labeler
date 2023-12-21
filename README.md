@@ -41,6 +41,33 @@ Once you've completed the annotation process for your dataset of images, it's ti
 This format is the standard choice for training the popular YOLO family of models. For each image, a list of its annotations is saved in a .txt file bearing the image's name. Each annotation is defined by a class ID and four values, all normalized between 0 and 1. These values represent the x and y coordinates of the annotation's center, as well as its width and height, all relative to the image's dimensions.
 #### Raw JSON
 This format retains all information about the labels in its raw form, but it requires parsing to obtain the desired data format. 
+
+## How To Install
+#### Requirements
+* Node.js version *18.16.1*
+* NPM version *9.5.1*
+* MongoDB version *7.0.1*
+* Tesseract version *5.3.1*
+
+#### 1 - Install the required Node.js dependencies
+After cloning DocuLabeler's repository locally, you'll have to install the Node.js required packages for both the Client and Server components. To do so:
+1. Run "npm install" from inside of the folder "docu-labeler/doculabeler"
+2. Run "npm install" from inside of the folder "docu-labeler/server"
+
+#### 2 - Initialize the MongoDB Database
+In order to do so, you can run the script **initialize_database.js** inside *"docu-labeler/server/scripts"* using Node.js. The script creates the database automatically, but assumes that your database can be accessed locally from MongoDB's standard port 27017. If that's not the case, the script should be modified accordingly.
+
+#### 3 - Start the application
+At this point, everything should be ready. To start the server, place yourself inside of the folder *"docu-labeler/server"* and run **"node main.js"**. To start the application, place yourself inside of the folder docu-labeler/doculabeler and run **"npm start"**.
+
+### Notes
+- In order to use Tesseract in your annotation workflow, you'll have to add it to your system's PATH environment variable.
+- If you want to allow multiple users to use the application, you will have to change the value of the environment variable "DOCULABELER_API_ADDRESS," found in the *"docu-labeler/doculabeler/.env"* file so that it contains the IP address and port number of the server.
+
+
+
+
+
   
 
 
