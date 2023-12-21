@@ -55,7 +55,7 @@ After cloning DocuLabeler's repository locally, you'll have to install the Node.
 2. Run "npm install" from inside of the folder "docu-labeler/server"
 
 #### 2 - Initialize the MongoDB Database
-In order to do so, you can run the script **initialize_database.js** inside *"docu-labeler/server/scripts"* using Node.js. The script creates the database automatically, but assumes that your database can be accessed locally from MongoDB's standard port 27017. If that's not the case, the script should be modified accordingly.
+In order to do so, you can run the script **initialize_database.js** inside *"docu-labeler/server/scripts"* using Node.js. The script creates the database automatically, but assumes that your deployment can be accessed locally from MongoDB's standard port 27017. If that's not the case, the script should be modified accordingly.
 
 #### 3 - Start the application
 At this point, everything should be ready. To start the server, place yourself inside of the folder *"docu-labeler/server"* and run **"node main.js"**. To start the client application, place yourself inside of the folder *"docu-labeler/doculabeler"* and run **"npm start"**.
